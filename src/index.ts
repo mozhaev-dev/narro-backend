@@ -2,7 +2,8 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
-import { testRoutes } from './routes/test';
+import { API_PREFIX } from './consts';
+import { registerRoutes } from './router';
 
 const fastify = Fastify({
   logger: {
@@ -12,7 +13,6 @@ const fastify = Fastify({
 
 async function start(): Promise<void> {
   try {
-    // Register plugins
     await fastify.register(cors, {
       origin: process.env['NODE_ENV'] === 'production' ? false : true,
     });
@@ -20,13 +20,7 @@ async function start(): Promise<void> {
     await fastify.register(helmet);
     await fastify.register(sensible);
 
-    // Register routes
-    await fastify.register(testRoutes, { prefix: '/api/v1' });
-
-    // Health check endpoint
-    fastify.get('/health', async () => {
-      return { status: 'ok', timestamp: new Date().toISOString() };
-    });
+    await fastify.register(registerRoutes, { prefix: API_PREFIX });
 
     const port = Number(process.env['PORT']) || 3000;
     const host = process.env['HOST'] || '0.0.0.0';
