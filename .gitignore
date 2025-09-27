@@ -96,6 +96,7 @@ pids
 *.pid.lock
 
 # IDE
+.cursor/
 .vscode/
 .idea/
 *.swp

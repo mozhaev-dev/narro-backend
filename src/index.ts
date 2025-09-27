@@ -1,29 +1,31 @@
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
+import Fastify from 'fastify';
 import { API_PREFIX } from './consts';
 import { registerRoutes } from './router';
 
 const fastify = Fastify({
   logger: {
-    level: process.env['LOG_LEVEL'] || 'info',
+    level: process.env.LOG_LEVEL || 'info',
   },
 });
 
-async function start(): Promise<void> {
+async function start (): Promise<void> {
   try {
     await fastify.register(cors, {
-      origin: process.env['NODE_ENV'] === 'production' ? false : true,
+      origin: process.env.NODE_ENV === 'production'
+        ? process.env.ALLOWED_ORIGINS?.split(',') || []
+        : true,
     });
-    
+
     await fastify.register(helmet);
     await fastify.register(sensible);
 
     await fastify.register(registerRoutes, { prefix: API_PREFIX });
 
-    const port = Number(process.env['PORT']) || 3000;
-    const host = process.env['HOST'] || '0.0.0.0';
+    const port = Number(process.env.PORT) || 3000;
+    const host = process.env.HOST || '0.0.0.0';
 
     await fastify.listen({ port, host });
     console.log(`Server is running on http://${host}:${port}`);
