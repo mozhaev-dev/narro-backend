@@ -5,11 +5,19 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "npm run db:generate && tsc",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "postinstall": "npm run db:generate"
   },
   "author": "Sergei Mozhaev <mozhaev.dev@gmail.com>",
   "license": "ISC",
@@ -17,6 +25,8 @@
     "@fastify/cors": "^8.4.0",
     "@fastify/helmet": "^11.1.1",
     "@fastify/sensible": "^5.5.0",
+    "@prisma/client": "^6.16.2",
+    "dotenv": "^17.2.2",
     "fastify": "^4.24.3"
   },
   "devDependencies": {
@@ -28,6 +38,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
+    "prisma": "^6.16.2",
     "tsx": "^4.1.4",
     "typescript": "^5.2.2"
   },

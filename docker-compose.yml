@@ -11,6 +11,9 @@ services:
       - PORT=3000
       - HOST=0.0.0.0
       - LOG_LEVEL=info
+      - DATABASE_URL=postgresql://narro:${POSTGRES_PASSWORD:-narro123}@postgres:5432/narro
+    depends_on:
+      - postgres
     restart: unless-stopped
     networks:
       - narro-network
@@ -29,18 +32,18 @@ services:
   #   networks:
   #     - narro-network
 
-  # postgres:
-  #   image: postgres:15-alpine
-  #   environment:
-  #     POSTGRES_DB: narro
-  #     POSTGRES_USER: narro
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-narro123}
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
-  #   networks:
-  #     - narro-network
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: narro
+      POSTGRES_USER: narro
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-narro123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - narro-network
 
   # minio:
   #   image: minio/minio:latest
@@ -59,6 +62,7 @@ services:
 networks:
   narro-network:
     driver: bridge
-# volumes:
-#   postgres_data:
+
+volumes:
+  postgres_data:
 #   minio_data:

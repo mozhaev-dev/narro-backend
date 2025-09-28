@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
 import Fastify from 'fastify';
 import { API_PREFIX } from './consts';
+import { prisma } from './lib/prisma';
 import { registerRoutes } from './router';
 
 const fastify = Fastify({
@@ -13,6 +15,10 @@ const fastify = Fastify({
 
 async function start (): Promise<void> {
   try {
+    // Test database connection
+    await prisma.$connect();
+    console.log('✅ Database connected successfully');
+
     await fastify.register(cors, {
       origin: process.env.NODE_ENV === 'production'
         ? process.env.ALLOWED_ORIGINS?.split(',') || []
@@ -28,7 +34,7 @@ async function start (): Promise<void> {
     const host = process.env.HOST || '0.0.0.0';
 
     await fastify.listen({ port, host });
-    console.log(`Server is running on http://${host}:${port}`);
+    console.log(`🚀 Server is running on http://${host}:${port}`);
   } catch (error) {
     fastify.log.error(error);
     process.exit(1);
@@ -39,12 +45,14 @@ async function start (): Promise<void> {
 process.on('SIGINT', async () => {
   console.log('Received SIGINT, shutting down gracefully...');
   await fastify.close();
+  await prisma.$disconnect();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('Received SIGTERM, shutting down gracefully...');
   await fastify.close();
+  await prisma.$disconnect();
   process.exit(0);
 });
 
