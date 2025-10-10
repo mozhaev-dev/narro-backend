@@ -26,10 +26,13 @@
     "@fastify/helmet": "^11.1.1",
     "@fastify/sensible": "^5.5.0",
     "@prisma/client": "^6.16.2",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
-    "fastify": "^4.24.3"
+    "fastify": "^4.24.3",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",

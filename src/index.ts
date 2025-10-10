@@ -6,6 +6,7 @@ import Fastify from 'fastify';
 import { API_PREFIX } from './consts';
 import { prisma } from './lib/prisma';
 import { registerRoutes } from './router';
+import { registerErrorHandler } from './middleware/errorHandler/errorHandler';
 
 const fastify = Fastify({
   logger: {
@@ -15,7 +16,6 @@ const fastify = Fastify({
 
 async function start (): Promise<void> {
   try {
-    // Test database connection
     await prisma.$connect();
     console.log('✅ Database connected successfully');
 
@@ -27,6 +27,8 @@ async function start (): Promise<void> {
 
     await fastify.register(helmet);
     await fastify.register(sensible);
+
+    await registerErrorHandler(fastify);
 
     await fastify.register(registerRoutes, { prefix: API_PREFIX });
 
