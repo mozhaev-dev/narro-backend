@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const baseUserSchema = z.object({
+export const baseUserBodySchema = z.object({
   email: z
     .email('Invalid email format')
     .min(1, 'Email is required')
@@ -24,7 +24,7 @@ export const baseUserSchema = z.object({
     .transform((val) => val ?? null),
 });
 
-export const createUserSchema = baseUserSchema.extend({
+export const createUserSchema = baseUserBodySchema.extend({
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters')
@@ -32,4 +32,10 @@ export const createUserSchema = baseUserSchema.extend({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one lowercase letter, one uppercase letter, and one number'),
 });
 
-export type CreateUserQuery = z.infer<typeof createUserSchema>;
+// Schema for updating user profile (without password)
+export const updateUserBodySchema = baseUserBodySchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
+export type CreateUserBody = z.infer<typeof createUserSchema>;
+export type UpdateUserBody = z.infer<typeof updateUserBodySchema>;

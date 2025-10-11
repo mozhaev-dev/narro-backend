@@ -28,11 +28,8 @@ export function createHttpSuccess<T> (data: T, pagination?: PaginationResponse):
   const response: HttpSuccess<T> = {
     success: true,
     data,
+    pagination,
   };
-
-  if (pagination) {
-    response.pagination = pagination;
-  }
 
   return response;
 }

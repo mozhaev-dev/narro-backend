@@ -1,6 +1,6 @@
-import { PaginationQuery } from '../middleware/validation';
+import { PaginationBody } from '../middleware/validation';
 
-export function handlePaginationParams (paginationQuery: PaginationQuery): PaginationQuery & { skip: number } {
+export function handlePaginationParams (paginationQuery: PaginationBody): PaginationBody & { skip: number } {
   const { page, limit } = paginationQuery;
   const skip = (page - 1) * limit;
 

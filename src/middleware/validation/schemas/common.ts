@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const paginationSchema = z.object({
+export const paginationBodySchema = z.object({
   page: z
     .string()
     .optional()
@@ -18,5 +18,5 @@ export const idParamSchema = z.object({
   id: z.cuid('Invalid ID format'),
 });
 
-export type PaginationQuery = z.infer<typeof paginationSchema>;
+export type PaginationBody = z.infer<typeof paginationBodySchema>;
 export type IdParam = z.infer<typeof idParamSchema>;
