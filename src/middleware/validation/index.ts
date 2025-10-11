@@ -1,8 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ZodObject } from 'zod';
 import { $ZodIssue } from 'zod/v4/core';
-import { HttpError } from '../../types/errors';
-import { createHttpError } from '../../utils';
+import { createHttpError, HttpError } from '../../utils';
 export * from './schemas';
 
 interface ValidationOptions {

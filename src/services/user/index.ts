@@ -1,10 +1,9 @@
 import { prisma } from '../../lib/prisma';
 import { hashPassword } from '../../utils/password';
-import { SAFE_USER_SELECT } from './selects';
-import { CreateUser, SafeUser } from './types';
-export * from './types';
+import { SAFE_USER_SELECT, SafeUserSelect } from './selects';
+import { Prisma } from '../../generated/prisma';
 
-export async function createUser (userData: CreateUser): Promise<SafeUser> {
+export async function createUser (userData: Prisma.UserCreateInput): Promise<SafeUserSelect> {
   const { password, ...restData } = userData;
 
   const hashedPassword = await hashPassword(password);
@@ -18,4 +17,20 @@ export async function createUser (userData: CreateUser): Promise<SafeUser> {
   });
 
   return user;
+}
+
+export async function getAllUsers (skip: number, limit: number): Promise<{ users: SafeUserSelect[]; totalCount: number }> {
+  const [users, totalCount] = await Promise.all([
+    prisma.user.findMany({
+      select: SAFE_USER_SELECT,
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    prisma.user.count(),
+  ]);
+
+  return { users, totalCount };
 }

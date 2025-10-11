@@ -12,6 +12,10 @@ export const FULL_USER_SELECT: Prisma.UserSelect = {
   updatedAt: true,
 } as const;
 
+export type FullUserSelect = Prisma.UserGetPayload<{
+  select: typeof FULL_USER_SELECT;
+}>;
+
 export const SAFE_USER_SELECT: Prisma.UserSelect = {
   id: true,
   email: true,
@@ -23,3 +27,7 @@ export const SAFE_USER_SELECT: Prisma.UserSelect = {
   createdAt: true,
   updatedAt: true,
 } as const;
+
+export type SafeUserSelect = Prisma.UserGetPayload<{
+  select: typeof SAFE_USER_SELECT;
+}>;

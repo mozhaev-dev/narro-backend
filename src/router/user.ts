@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createUserAction, getUsers } from '../controllers/user';
+import { createUserAction, getUsersAction } from '../controllers';
 import { validateBody, validateQuery, paginationSchema, createUserSchema } from '../middleware/validation';
 
 export default async function (
@@ -7,7 +7,7 @@ export default async function (
 ): Promise<void> {
   fastify.get('/users', {
     preHandler: validateQuery(paginationSchema),
-    handler: getUsers,
+    handler: getUsersAction,
   });
 
   fastify.post('/users', {
